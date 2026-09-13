@@ -5,7 +5,6 @@ import { useEffect } from "react";
 export default function ProductPage() {
   useEffect(() => {
     window.dataLayer = window.dataLayer || [];
-
     window.dataLayer.push({
       event: "view_item",
       content_name: "SignalFlow Pro",
@@ -16,6 +15,18 @@ export default function ProductPage() {
     });
   }, []);
 
+  function handleStartFreeTrial() {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "add_to_cart",
+      content_name: "SignalFlow Pro",
+      content_category: "Marketing Analytics",
+      content_id: "signalflow-pro",
+      value: 99,
+      currency: "USD",
+    });
+  }
+
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white">
       <section className="mx-auto flex min-h-screen max-w-5xl items-center px-6 py-24 lg:px-8">
@@ -24,7 +35,6 @@ export default function ProductPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-300">
               SignalFlow Pro
             </p>
-
             <h1 className="mt-5 text-5xl font-semibold tracking-[-0.04em] sm:text-6xl">
               Marketing analytics without the guesswork.
             </h1>
@@ -41,6 +51,7 @@ export default function ProductPage() {
 
             <button
               type="button"
+              onClick={handleStartFreeTrial}
               className="mt-8 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-black transition hover:-translate-y-0.5 hover:bg-white/90"
             >
               Start free trial →
