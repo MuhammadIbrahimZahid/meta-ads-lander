@@ -36,7 +36,7 @@ export default function LeadPage() {
         {!submitted ? (
           <form
             onSubmit={handleSubmit}
-            className="mt-10 space-y-5 rounded-2xl border border-white/10 bg-white/[0.03] p-6"
+            className="mt-10 space-y-5 rounded-2xl border border-white/10 bg-white/3 p-6"
           >
             <div>
               <label

@@ -63,11 +63,11 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-violet-600/20 blur-[140px]" />
+        <div className="absolute left-1/2 top-0 h-150 w-225 -translate-x-1/2 rounded-full bg-violet-600/20 blur-[140px]" />
 
         <div className="relative mx-auto max-w-7xl px-6 pb-24 pt-24 lg:px-8 lg:pb-32 lg:pt-32">
           <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/70">
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/4 px-4 py-2 text-sm text-white/70">
               <span className="h-2 w-2 rounded-full bg-emerald-400" />
               Marketing intelligence for modern teams
             </div>
@@ -75,7 +75,7 @@ export default function Home() {
             <h1 className="text-5xl font-semibold tracking-[-0.04em] sm:text-6xl lg:text-7xl">
               Stop guessing.
               <br />
-              <span className="bg-gradient-to-r from-violet-300 via-white to-blue-300 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-violet-300 via-white to-blue-300 bg-clip-text text-transparent">
                 Start measuring.
               </span>
             </h1>
@@ -105,7 +105,7 @@ export default function Home() {
 
           {/* Dashboard preview */}
           <div className="mx-auto mt-20 max-w-5xl">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-2 shadow-2xl shadow-violet-950/30">
+            <div className="rounded-2xl border border-white/10 bg-white/4 p-2 shadow-2xl shadow-violet-950/30">
               <div className="rounded-xl border border-white/10 bg-[#111111] p-5 sm:p-7">
                 <div className="mb-7 flex items-center justify-between">
                   <div>
@@ -130,7 +130,7 @@ export default function Home() {
                   ].map(([value, label, change]) => (
                     <div
                       key={label}
-                      className="rounded-xl border border-white/10 bg-white/[0.03] p-5"
+                      className="rounded-xl border border-white/10 bg-white/3 p-5"
                     >
                       <p className="text-2xl font-semibold tracking-tight">
                         {value}
@@ -145,13 +145,13 @@ export default function Home() {
                   ))}
                 </div>
 
-                <div className="mt-4 h-48 overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] p-5">
+                <div className="mt-4 h-48 overflow-hidden rounded-xl border border-white/10 bg-white/2 p-5">
                   <div className="flex h-full items-end gap-2">
                     {[32, 42, 37, 54, 48, 61, 58, 72, 66, 81, 76, 92].map(
                       (height, index) => (
                         <div
                           key={index}
-                          className="flex-1 rounded-t-sm bg-gradient-to-t from-violet-600/50 to-violet-300"
+                          className="flex-1 rounded-t-sm bg-linear-to-t from-violet-600/50 to-violet-300"
                           style={{ height: `${height}%` }}
                         />
                       ),
@@ -165,10 +165,7 @@ export default function Home() {
       </section>
 
       {/* Stats */}
-      <section
-        id="results"
-        className="border-y border-white/10 bg-white/[0.02]"
-      >
+      <section id="results" className="border-y border-white/10 bg-white/2">
         <div className="mx-auto grid max-w-7xl divide-y divide-white/10 px-6 sm:grid-cols-3 sm:divide-x sm:divide-y-0 lg:px-8">
           {stats.map((stat) => (
             <div key={stat.label} className="px-6 py-10 text-center">
@@ -220,7 +217,7 @@ export default function Home() {
       {/* How it works */}
       <section
         id="how-it-works"
-        className="border-y border-white/10 bg-white/[0.02]"
+        className="border-y border-white/10 bg-white/2"
       >
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
           <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
@@ -248,7 +245,7 @@ export default function Home() {
               ].map((item, index) => (
                 <div
                   key={item}
-                  className="flex items-center gap-5 rounded-xl border border-white/10 bg-white/[0.03] p-5"
+                  className="flex items-center gap-5 rounded-xl border border-white/10 bg-white/3 p-5"
                 >
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-500/10 text-sm font-semibold text-violet-300">
                     {index + 1}
@@ -280,7 +277,7 @@ export default function Home() {
 
       {/* CTA */}
       <section id="get-started" className="px-6 pb-24 lg:px-8">
-        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 to-indigo-700 px-6 py-16 text-center sm:px-12">
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-linear-to-br from-violet-600 to-indigo-700 px-6 py-16 text-center sm:px-12">
           <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
           <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-black/10 blur-3xl" />
 
