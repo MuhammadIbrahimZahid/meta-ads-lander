@@ -51,7 +51,7 @@ export async function sendMetaLeadEvent({
   const payload = {
     data: [
       {
-        event_name: "generate_lead",
+        event_name: "Lead",
         event_time: eventTime,
         event_id: eventId,
         action_source: "website",
