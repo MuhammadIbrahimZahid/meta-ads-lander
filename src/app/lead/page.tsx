@@ -6,13 +6,41 @@ import { pushToDataLayer } from "@/lib/analytics";
 export default function LeadPage() {
   const [submitted, setSubmitted] = useState(false);
 
-  function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    const name = formData.get("name");
+    const email = formData.get("email");
+
+    const eventId = crypto.randomUUID();
+
+    const response = await fetch("/api/lead", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        lead_source: "website",
+        lead_form: "demo_request",
+        event_id: eventId,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error("Lead API failed:", response.status);
+      return;
+    }
 
     pushToDataLayer({
       event: "generate_lead",
       lead_source: "website",
       lead_form: "demo_request",
+      event_id: eventId,
     });
 
     setSubmitted(true);
