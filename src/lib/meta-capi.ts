@@ -62,6 +62,7 @@ export async function sendMetaLeadEvent({
         },
       },
     ],
+    test_event_code: "TEST57978",
   };
 
   const response = await fetch(
