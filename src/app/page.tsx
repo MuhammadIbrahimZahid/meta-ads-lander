@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const features = [
   {
     number: "01",
@@ -87,19 +89,19 @@ export default function Home() {
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <a
-                href="#get-started"
+              <Link
+                href="/product"
                 className="w-full rounded-full bg-white px-7 py-3.5 text-center text-sm font-semibold text-black transition hover:-translate-y-0.5 hover:bg-white/90 sm:w-auto"
               >
-                Start measuring →
-              </a>
+                View product →
+              </Link>
 
-              <a
-                href="#how-it-works"
+              <Link
+                href="/lead"
                 className="w-full rounded-full border border-white/15 px-7 py-3.5 text-center text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/5 sm:w-auto"
               >
-                See how it works
-              </a>
+                Become a lead
+              </Link>
             </div>
           </div>
 
