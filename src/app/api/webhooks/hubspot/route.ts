@@ -36,7 +36,7 @@ function verifyHubSpotSignature(
     return false;
   }
 
-  const sourceString = clientSecret + method + url + rawBody + timestamp;
+  const sourceString = method + url + rawBody + timestamp;
 
   const expectedSignature = createHmac("sha256", clientSecret)
     .update(sourceString)
