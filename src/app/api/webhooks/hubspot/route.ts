@@ -4,7 +4,6 @@ import { sendMetaEvent } from "@/lib/meta-capi";
 
 type HubSpotWebhookEvent = {
   subscriptionType?: string;
-  objectType?: string;
   objectTypeId?: string;
   objectId?: string;
   propertyName?: string;
@@ -100,7 +99,7 @@ export async function POST(request: Request) {
     console.log("HubSpot webhook received:", event);
 
     if (
-      event.objectType !== "contact" ||
+      event.objectTypeId !== "0-1" ||
       event.subscriptionType !== "object.propertyChange" ||
       event.propertyName !== "hs_lead_status"
     ) {
