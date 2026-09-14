@@ -1,4 +1,5 @@
 import { sendMetaLeadEvent } from "@/lib/meta-capi";
+import { upsertHubSpotContact } from "@/lib/hubspot";
 
 export async function POST(request: Request) {
   try {
@@ -31,6 +32,7 @@ export async function POST(request: Request) {
       event_id,
     });
 
+    // 1. Send lead to Meta CAPI
     const metaResult = await sendMetaLeadEvent({
       eventId: event_id,
       email,
@@ -39,6 +41,21 @@ export async function POST(request: Request) {
     });
 
     console.log("Meta CAPI Lead sent:", metaResult);
+
+    // 2. Create/update contact in HubSpot
+    try {
+      const hubSpotResult = await upsertHubSpotContact({
+        email,
+        name,
+        leadSource: lead_source,
+        leadForm: lead_form,
+      });
+
+      console.log("HubSpot contact upserted:", hubSpotResult);
+    } catch (hubSpotError) {
+      // Don't fail the lead because HubSpot failed.
+      console.error("HubSpot integration failed:", hubSpotError);
+    }
 
     return Response.json({
       success: true,
@@ -50,7 +67,6 @@ export async function POST(request: Request) {
         lead_form,
         event_id,
       },
-      meta: metaResult,
     });
   } catch (error) {
     console.error("Lead API error:", error);

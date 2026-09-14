@@ -2,11 +2,13 @@ import { createHash } from "crypto";
 
 const META_GRAPH_VERSION = "v23.0";
 
-type MetaLeadEventInput = {
+type MetaEventInput = {
+  eventName: string;
   eventId: string;
   email: string;
   clientIpAddress?: string;
   clientUserAgent?: string;
+  customData?: Record<string, unknown>;
 };
 
 function sha256(value: string): string {
@@ -17,12 +19,14 @@ function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
 }
 
-export async function sendMetaLeadEvent({
+export async function sendMetaEvent({
+  eventName,
   eventId,
   email,
   clientIpAddress,
   clientUserAgent,
-}: MetaLeadEventInput) {
+  customData,
+}: MetaEventInput) {
   const pixelId = process.env.META_PIXEL_ID;
   const accessToken = process.env.META_CAPI_ACCESS_TOKEN;
 
@@ -51,7 +55,7 @@ export async function sendMetaLeadEvent({
   const payload = {
     data: [
       {
-        event_name: "Lead",
+        event_name: eventName,
         event_time: eventTime,
         event_id: eventId,
         action_source: "website",
@@ -59,6 +63,7 @@ export async function sendMetaLeadEvent({
         custom_data: {
           lead_source: "website",
           lead_form: "demo_request",
+          ...customData,
         },
       },
     ],
@@ -85,4 +90,24 @@ export async function sendMetaLeadEvent({
   }
 
   return result;
+}
+
+export async function sendMetaLeadEvent({
+  eventId,
+  email,
+  clientIpAddress,
+  clientUserAgent,
+}: {
+  eventId: string;
+  email: string;
+  clientIpAddress?: string;
+  clientUserAgent?: string;
+}) {
+  return sendMetaEvent({
+    eventName: "Lead",
+    eventId,
+    email,
+    clientIpAddress,
+    clientUserAgent,
+  });
 }
