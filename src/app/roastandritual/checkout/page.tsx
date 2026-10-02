@@ -101,7 +101,7 @@ export default function CheckoutPage() {
           </p>
 
           <Link
-            href="/roastandritual/product"
+            href="/roastandritual"
             className="mt-8 inline-flex rounded-full bg-[#211a15] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#352920]"
           >
             Browse coffee
@@ -251,10 +251,7 @@ export default function CheckoutPage() {
             <div className="mt-6 space-y-4">
               {cart.items.map((item) => {
                 const product: RoastAndRitualProduct | undefined =
-                  products.find(
-                    (candidate: RoastAndRitualProduct) =>
-                      candidate.id === item.productId,
-                  );
+                  products.find((candidate) => candidate.id === item.productId);
 
                 if (!product) {
                   return null;
@@ -274,7 +271,8 @@ export default function CheckoutPage() {
                     </div>
 
                     <p className="text-sm text-[#211a15]/70">
-                      PKR {(product.price * item.quantity).toLocaleString()}
+                      {product.currency}{" "}
+                      {(product.price * item.quantity).toLocaleString()}
                     </p>
                   </div>
                 );

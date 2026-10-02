@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import {
@@ -50,10 +51,12 @@ export default function RoastAndRitualCartPage() {
   }
 
   const subtotal = getCartSubtotal(cart, products);
+  const shipping = subtotal > 0 ? 200 : 0;
+  const total = subtotal + shipping;
 
   return (
     <main className="min-h-screen bg-[#f5f0e8] text-[#211a15]">
-      <header className="border-b border-[#211a15]/10">
+      <header className="border-b border-[#211a15]/10 bg-[#f5f0e8]">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <Link
             href="/roastandritual"
@@ -63,7 +66,7 @@ export default function RoastAndRitualCartPage() {
           </Link>
 
           <Link
-            href="/roastandritual/product?id=RR-01"
+            href="/roastandritual"
             className="text-sm text-[#211a15]/60 transition hover:text-[#211a15]"
           >
             Continue shopping
@@ -91,10 +94,10 @@ export default function RoastAndRitualCartPage() {
             </p>
 
             <Link
-              href="/roastandritual/product?id=RR-01"
+              href="/roastandritual"
               className="mt-7 inline-flex rounded-full bg-[#211a15] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#352920]"
             >
-              Shop House Blend
+              Browse coffee
             </Link>
           </div>
         ) : (
@@ -116,25 +119,41 @@ export default function RoastAndRitualCartPage() {
                   >
                     <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                       <div className="flex items-center gap-5">
-                        <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-[#d9c6b2]">
-                          <span className="text-center text-xs font-semibold uppercase tracking-widest text-[#211a15]/60">
-                            House
-                            <br />
-                            Blend
-                          </span>
-                        </div>
+                        {/* Clean product image presentation */}
+                        <Link
+                          href={`/roastandritual/product?id=${product.id}`}
+                          className="group relative h-24 w-24 shrink-0 overflow-hidden rounded-xl"
+                        >
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            fill
+                            sizes="96px"
+                            className="object-contain transition duration-300 group-hover:scale-[1.03]"
+                          />
+                        </Link>
 
                         <div>
-                          <h2 className="font-semibold">{product.name}</h2>
+                          <Link
+                            href={`/roastandritual/product?id=${product.id}`}
+                            className="font-semibold transition hover:text-[#8b5e3c]"
+                          >
+                            {product.name}
+                          </Link>
 
                           <p className="mt-1 text-sm text-[#211a15]/50">
-                            PKR {product.price.toLocaleString()} each
+                            {product.currency} {product.price.toLocaleString()}{" "}
+                            each
+                          </p>
+
+                          <p className="mt-1 text-xs text-[#211a15]/40">
+                            {product.category}
                           </p>
 
                           <button
                             type="button"
                             onClick={() => handleRemove(item.productId)}
-                            className="mt-3 text-sm text-[#8b5e3c] underline-offset-4 hover:underline"
+                            className="mt-3 text-sm text-[#8b5e3c] underline-offset-4 transition hover:underline"
                           >
                             Remove
                           </button>
@@ -142,7 +161,7 @@ export default function RoastAndRitualCartPage() {
                       </div>
 
                       <div className="flex items-center justify-between gap-8 sm:justify-end">
-                        <div className="flex items-center rounded-full border border-[#211a15]/15">
+                        <div className="flex items-center rounded-full border border-[#211a15]/15 bg-white/30">
                           <button
                             type="button"
                             onClick={() =>
@@ -151,8 +170,8 @@ export default function RoastAndRitualCartPage() {
                                 item.quantity - 1,
                               )
                             }
-                            className="flex h-10 w-10 items-center justify-center text-lg"
-                            aria-label="Decrease quantity"
+                            className="flex h-10 w-10 items-center justify-center text-lg transition hover:text-[#8b5e3c]"
+                            aria-label={`Decrease quantity of ${product.name}`}
                           >
                             −
                           </button>
@@ -169,15 +188,16 @@ export default function RoastAndRitualCartPage() {
                                 item.quantity + 1,
                               )
                             }
-                            className="flex h-10 w-10 items-center justify-center text-lg"
-                            aria-label="Increase quantity"
+                            className="flex h-10 w-10 items-center justify-center text-lg transition hover:text-[#8b5e3c]"
+                            aria-label={`Increase quantity of ${product.name}`}
                           >
                             +
                           </button>
                         </div>
 
                         <p className="w-28 text-right font-semibold">
-                          PKR {(product.price * item.quantity).toLocaleString()}
+                          {product.currency}{" "}
+                          {(product.price * item.quantity).toLocaleString()}
                         </p>
                       </div>
                     </div>
@@ -189,29 +209,35 @@ export default function RoastAndRitualCartPage() {
             <aside className="h-fit rounded-2xl border border-[#211a15]/10 bg-white/50 p-6">
               <h2 className="text-xl font-semibold">Order summary</h2>
 
-              <div className="mt-6 flex items-center justify-between border-b border-[#211a15]/10 pb-5">
-                <span className="text-sm text-[#211a15]/50">Subtotal</span>
+              <div className="mt-6 space-y-3 border-b border-[#211a15]/10 pb-5 text-sm">
+                <div className="flex items-center justify-between text-[#211a15]/50">
+                  <span>Subtotal</span>
 
-                <span className="font-semibold">
-                  PKR {subtotal.toLocaleString()}
-                </span>
+                  <span>PKR {subtotal.toLocaleString()}</span>
+                </div>
+
+                <div className="flex items-center justify-between text-[#211a15]/50">
+                  <span>Shipping</span>
+
+                  <span>PKR {shipping.toLocaleString()}</span>
+                </div>
               </div>
 
               <div className="mt-5 flex items-center justify-between">
                 <span className="font-semibold">Total</span>
 
                 <span className="text-xl font-semibold">
-                  PKR {subtotal.toLocaleString()}
+                  PKR {total.toLocaleString()}
                 </span>
               </div>
 
               <p className="mt-3 text-xs leading-5 text-[#211a15]/40">
-                Shipping and final order details will be handled at checkout.
+                Shipping is calculated at PKR 200 for orders with items.
               </p>
 
               <Link
                 href="/roastandritual/checkout"
-                className="mt-7 flex w-full items-center justify-center rounded-full bg-[#211a15] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#352920]"
+                className="mt-7 flex w-full items-center justify-center rounded-full bg-[#211a15] px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#352920]"
               >
                 Proceed to checkout
               </Link>

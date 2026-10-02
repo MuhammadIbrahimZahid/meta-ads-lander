@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import {
   getProductById,
@@ -34,22 +36,33 @@ function loadCart(): RoastAndRitualCart {
 }
 
 export default function RoastAndRitualProductPage() {
-  // Lazy initialization means the cart is loaded during the initial
-  // client render instead of requiring an effect + setState.
+  const searchParams = useSearchParams();
+  const productId = searchParams.get("id");
+
   const [cart, setCart] = useState<RoastAndRitualCart>(() => loadCart());
   const [added, setAdded] = useState(false);
 
-  const product = getProductById("RR-01");
+  const product = productId ? getProductById(productId) : undefined;
+
+  const [activeImage, setActiveImage] = useState(product?.image ?? "");
 
   if (!product) {
     return (
       <main className="min-h-screen bg-[#f5f0e8] px-6 py-24 text-[#211a15]">
-        <div className="mx-auto max-w-3xl">
-          <h1 className="text-3xl font-semibold">Product not found</h1>
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#8b5e3c]">
+            Roast & Ritual
+          </p>
+
+          <h1 className="mt-4 text-4xl font-semibold">Product not found</h1>
+
+          <p className="mt-4 text-[#211a15]/60">
+            We couldn&apos;t find the coffee you&apos;re looking for.
+          </p>
 
           <Link
             href="/roastandritual"
-            className="mt-6 inline-block text-sm font-medium underline"
+            className="mt-8 inline-flex rounded-full bg-[#211a15] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#352920]"
           >
             Back to Roast & Ritual
           </Link>
@@ -69,9 +82,14 @@ export default function RoastAndRitualProductPage() {
 
   const cartCount = getCartItemCount(cart);
 
+  const galleryImages = [
+    product.image,
+    ...(product.supportingImage ? [product.supportingImage] : []),
+  ];
+
   return (
     <main className="min-h-screen bg-[#f5f0e8] text-[#211a15]">
-      <header className="border-b border-[#211a15]/10">
+      <header className="border-b border-[#211a15]/10 bg-[#f5f0e8]">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <Link
             href="/roastandritual"
@@ -102,24 +120,57 @@ export default function RoastAndRitualProductPage() {
           ← Back to shop
         </Link>
 
-        <div className="mt-10 grid gap-14 lg:grid-cols-2 lg:items-center">
-          <div className="overflow-hidden rounded-3xl bg-[#d9c6b2]">
-            <div className="flex aspect-square items-center justify-center p-10">
-              <div className="flex h-72 w-72 items-center justify-center rounded-full bg-[#211a15] text-center text-white shadow-2xl">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.25em] text-white/50">
-                    Roast & Ritual
-                  </p>
-
-                  <p className="mt-4 text-4xl font-semibold">House Blend</p>
-
-                  <p className="mt-2 text-sm text-white/50">250g</p>
-                </div>
-              </div>
+        <div className="mt-10 grid gap-14 lg:grid-cols-2 lg:items-start">
+          {/* Product gallery */}
+          <div className="w-full">
+            {/* Main active image */}
+            <div className="relative aspect-square overflow-hidden rounded-3xl bg-[#d9c6b2]">
+              <Image
+                src={activeImage}
+                alt={product.name}
+                fill
+                priority
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover p-0 transition-opacity duration-300"
+              />
             </div>
+
+            {/* Clickable thumbnails */}
+            {galleryImages.length > 1 && (
+              <div className="mt-6 flex flex-wrap items-center gap-4">
+                {galleryImages.map((image, index) => {
+                  const isActive = activeImage === image;
+
+                  return (
+                    <button
+                      key={image}
+                      type="button"
+                      onClick={() => setActiveImage(image)}
+                      aria-label={`View product image ${index + 1}`}
+                      aria-pressed={isActive}
+                      className={[
+                        "relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-transparent p-0 transition-all duration-200",
+                        isActive
+                          ? "ring-2 ring-[#211a15] ring-offset-2 ring-offset-[#f5f0e8]"
+                          : "opacity-60 hover:opacity-100",
+                      ].join(" ")}
+                    >
+                      <Image
+                        src={image}
+                        alt={`${product.name} image ${index + 1}`}
+                        fill
+                        sizes="96px"
+                        className="object-contain p-0 transition-transform duration-200 hover:scale-[1.03]"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          <div>
+          {/* Product information */}
+          <div className="lg:sticky lg:top-8">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#8b5e3c]">
               {product.category}
             </p>
@@ -163,12 +214,12 @@ export default function RoastAndRitualProductPage() {
                 </div>
 
                 <div>
-                  <p className="text-sm font-semibold">RR-01</p>
+                  <p className="text-sm font-semibold">{product.id}</p>
                   <p className="mt-1 text-xs text-[#211a15]/50">Product ID</p>
                 </div>
 
                 <div>
-                  <p className="text-sm font-semibold">PKR</p>
+                  <p className="text-sm font-semibold">{product.currency}</p>
                   <p className="mt-1 text-xs text-[#211a15]/50">Currency</p>
                 </div>
               </div>
